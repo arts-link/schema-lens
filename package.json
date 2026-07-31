@@ -22,7 +22,7 @@
     "dev": "pnpm --filter @schema-lens/example-basic dev",
     "test": "pnpm -r --if-present test",
     "test:watch": "pnpm -r --parallel --if-present test:watch",
-    "lint": "eslint .",
+    "lint": "pnpm --filter @schema-lens/core build && pnpm --filter @schema-lens/overlay build && eslint .",
     "typecheck": "pnpm -r --if-present typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
