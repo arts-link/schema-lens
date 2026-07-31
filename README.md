@@ -8,11 +8,11 @@ The project is framework-independent. The core package can be used by themes, CM
 
 ## Packages
 
-| Package                      | Purpose                                                                                                   |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `@schema-lens/core`          | Parsing, normalization, graph construction, diagnostics, custom rules, serialization, and DOM observation |
-| `@schema-lens/overlay`       | Framework-free, accessible browser inspector built on the core package                                    |
-| `@schema-lens/example-basic` | Private Vite application for manual testing                                                               |
+| Package                                | Purpose                                                                                                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `@arts-link/schema-lens-core`          | Parsing, normalization, graph construction, diagnostics, custom rules, serialization, and DOM observation |
+| `@arts-link/schema-lens-overlay`       | Framework-free, accessible browser inspector built on the core package                                    |
+| `@arts-link/schema-lens-example-basic` | Private Vite application for manual testing                                                               |
 
 ## Installation
 
@@ -26,8 +26,8 @@ pnpm build
 After publication:
 
 ```sh
-pnpm add @schema-lens/core
-pnpm add @schema-lens/overlay
+pnpm add @arts-link/schema-lens-core
+pnpm add @arts-link/schema-lens-overlay
 ```
 
 Both public packages are ESM-only and include TypeScript declarations.
@@ -35,7 +35,7 @@ Both public packages are ESM-only and include TypeScript declarations.
 ## Core usage
 
 ```ts
-import { inspectDocument, serializeInspectionResult } from "@schema-lens/core";
+import { inspectDocument, serializeInspectionResult } from "@arts-link/schema-lens-core";
 
 const result = inspectDocument(document);
 
@@ -46,7 +46,7 @@ console.log(JSON.stringify(serializeInspectionResult(result), null, 2));
 `inspectScripts` accepts an explicit iterable of `HTMLScriptElement` values when a consumer wants to inspect a subset:
 
 ```ts
-import { inspectScripts } from "@schema-lens/core";
+import { inspectScripts } from "@arts-link/schema-lens-core";
 
 const scripts = document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]');
 const result = inspectScripts(scripts);
@@ -55,7 +55,7 @@ const result = inspectScripts(scripts);
 ## Overlay usage
 
 ```ts
-import { createSchemaInspector } from "@schema-lens/overlay";
+import { createSchemaInspector } from "@arts-link/schema-lens-overlay";
 
 const inspector = createSchemaInspector({
   document,
@@ -72,7 +72,7 @@ The returned inspector exposes `open`, `close`, `toggle`, `refresh`, `getResult`
 Rules are explicitly scoped to one entity or the whole result. The engine assigns the registered rule ID to returned findings.
 
 ```ts
-import { inspectDocument, type InspectorRule } from "@schema-lens/core";
+import { inspectDocument, type InspectorRule } from "@arts-link/schema-lens-core";
 
 const rules: InspectorRule[] = [
   {
@@ -109,7 +109,7 @@ Custom IDs cannot use the reserved `schema-lens/` prefix. A rule exception becom
 ## Mutation observation
 
 ```ts
-import { createSchemaObserver } from "@schema-lens/core";
+import { createSchemaObserver } from "@arts-link/schema-lens-core";
 
 const observer = createSchemaObserver(
   document,
@@ -170,13 +170,46 @@ pnpm size
 
 The example includes valid linked entities, duplicate IDs, an unresolved reference, malformed JSON, and controls for adding, changing, and removing JSON-LD after load.
 
+## Automated releases
+
+GitHub Actions validates and builds every pull request and every push to `main`. A separate Changesets workflow uses npm Trusted Publishing with GitHub OIDC, so no long-lived npm token is stored in the repository. After repeating the validation suite, it:
+
+- creates or updates a `Release packages` pull request when pending Changesets exist;
+- publishes changed public packages after that release pull request is merged;
+- creates matching GitHub Releases and npm provenance attestations.
+
+The release job remains disabled until the repository variable `NPM_TRUSTED_PUBLISHING` is set to `true`.
+
+Because npm Trusted Publishing is configured per existing package, bootstrap each package once with an interactive, 2FA-protected publish from a clean `main` checkout:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm build
+pnpm --filter @arts-link/schema-lens-core publish --access public
+pnpm --filter @arts-link/schema-lens-overlay publish --access public
+```
+
+Complete npm's 2FA challenge for each publish. After the packages exist:
+
+1. Configure a GitHub Actions trusted publisher for both packages with GitHub owner `arts-link`, repository `schema-lens`, workflow filename `release.yml`, and permission to run `npm publish`.
+2. Set the GitHub Actions repository variable `NPM_TRUSTED_PUBLISHING` to `true`.
+3. Allow GitHub Actions to create release pull requests, or supply an appropriately scoped GitHub App or fine-grained token to Changesets.
+
+Trusted Publishing requires an OIDC-compatible npm CLI. The release workflow uses Node.js 24, installs npm 11.15 or newer, grants only the required job permissions, and performs no dependency-cache restore during publication.
+
+Add a Changeset to each pull request containing a user-visible package change:
+
+```sh
+pnpm changeset
+```
+
 ## Known limitations
 
 - IDs are matched as exact strings; URL expansion, base resolution, remote document loading, and JSON-LD expansion are intentionally out of scope.
 - Unmatched absolute URLs are recorded as external rather than warned as unresolved.
 - Schema Lens includes only a small deterministic advisory set, not the complete Schema.org vocabulary.
 - Version 0.1 inspects browser DOM scripts rather than accepting arbitrary server-side JSON values.
-- Package names have not been checked for npm availability.
+- The npm package names were unclaimed when release automation was configured; publishing requires membership in the `@arts-link` npm organization with package write access.
 - Browser compatibility is configured and tested in jsdom; the example still requires final manual verification in each supported browser before publication.
 
 ## Contributing

@@ -1,4 +1,4 @@
-import { createSchemaInspector } from "@schema-lens/overlay";
+import { createSchemaInspector } from "@arts-link/schema-lens-overlay";
 
 const inspector = createSchemaInspector({
   document,

@@ -7,7 +7,7 @@ import {
   type InspectedEntity,
   type SchemaFinding,
   type SchemaObserver,
-} from "@schema-lens/core";
+} from "@arts-link/schema-lens-core";
 
 import { styles } from "./styles.js";
 import type { SchemaInspector, SchemaInspectorOptions } from "./types.js";

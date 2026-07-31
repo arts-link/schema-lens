@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@schema-lens/example-basic"]
+  "ignore": ["@arts-link/schema-lens-example-basic"]
 }
