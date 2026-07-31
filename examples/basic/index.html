@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interactive Schema Lens example" />
+    <title>Schema Lens · Basic example</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="application/ld+json" id="main-schema">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@id": "#article",
+            "@type": ["Article", "BlogPosting"],
+            "headline": "Inspecting JSON-LD in the browser",
+            "datePublished": "2026-07-30",
+            "author": { "@id": "#person" },
+            "publisher": { "@id": "#organization" },
+            "mainEntityOfPage": { "@id": "#page" }
+          },
+          {
+            "@id": "#page",
+            "@type": "WebPage",
+            "name": "Schema Lens example",
+            "isPartOf": { "@id": "#website" }
+          },
+          {
+            "@id": "#website",
+            "@type": "WebSite",
+            "name": "Schema Lens",
+            "url": "https://example.com/"
+          },
+          {
+            "@id": "#organization",
+            "@type": "Organization",
+            "name": "Example Organization"
+          },
+          {
+            "@id": "#person",
+            "@type": "Person",
+            "name": "Ada Example"
+          },
+          {
+            "@id": "#missing-owner",
+            "@type": "WebPage",
+            "name": "Unresolved reference example",
+            "about": { "@id": "#not-defined" }
+          }
+        ]
+      }
+    </script>
+    <script type="application/ld+json" id="duplicate-one">
+      {
+        "@id": "#duplicate",
+        "@type": "Organization",
+        "name": "First definition"
+      }
+    </script>
+    <script type="application/ld+json" id="duplicate-two">
+      {
+        "@id": "#duplicate",
+        "@type": "Organization",
+        "name": "Conflicting definition"
+      }
+    </script>
+    <script type="application/ld+json" id="invalid-schema">
+      { "this": "script is intentionally malformed",
+    </script>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Interactive example</p>
+      <h1>Schema Lens</h1>
+      <p class="lede">
+        Inspect valid graphs, conflicting IDs, unresolved references, malformed JSON, and live DOM
+        changes without sending page data anywhere.
+      </p>
+
+      <section class="controls" aria-labelledby="controls-heading">
+        <h2 id="controls-heading">Try the observer</h2>
+        <div class="button-row">
+          <button type="button" id="open-inspector">Open inspector</button>
+          <button type="button" id="add-schema">Add JSON-LD</button>
+          <button type="button" id="modify-schema">Modify JSON-LD</button>
+          <button type="button" id="remove-schema">Remove JSON-LD</button>
+        </div>
+        <p id="status" role="status" aria-live="polite">Ready.</p>
+      </section>
+
+      <section class="notes" aria-labelledby="included-heading">
+        <h2 id="included-heading">Included diagnostics</h2>
+        <ul>
+          <li>A linked Article, WebPage, WebSite, Organization, and Person graph</li>
+          <li>Two conflicting definitions for the same <code>@id</code></li>
+          <li>A local reference with no matching entity</li>
+          <li>An intentionally malformed JSON-LD script</li>
+          <li>Controls that add, edit, and remove scripts after page load</li>
+        </ul>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
