@@ -172,13 +172,30 @@ The example includes valid linked entities, duplicate IDs, an unresolved referen
 
 ## Automated releases
 
-GitHub Actions validates and builds every pull request and every push to `main`. After a successful `main` build, the Changesets release job:
+GitHub Actions validates and builds every pull request and every push to `main`. A separate Changesets workflow uses npm Trusted Publishing with GitHub OIDC, so no long-lived npm token is stored in the repository. After repeating the validation suite, it:
 
 - creates or updates a `Release packages` pull request when pending Changesets exist;
 - publishes changed public packages after that release pull request is merged;
 - creates matching GitHub Releases and npm provenance attestations.
 
-Automated npm publication requires an Actions secret named `NPM_TOKEN` with permission to publish the `@schema-lens` scope. Without that secret, builds and release pull requests still work, but publication is skipped.
+The release job remains disabled until the repository variable `NPM_TRUSTED_PUBLISHING` is set to `true`.
+
+Because npm Trusted Publishing is configured per existing package, bootstrap each package once with an interactive, 2FA-protected publish from a clean `main` checkout:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm build
+pnpm --filter @schema-lens/core publish --access public
+pnpm --filter @schema-lens/overlay publish --access public
+```
+
+Complete npm's 2FA challenge for each publish. After the packages exist:
+
+1. Configure a GitHub Actions trusted publisher for both packages with GitHub owner `arts-link`, repository `schema-lens`, workflow filename `release.yml`, and permission to run `npm publish`.
+2. Set the GitHub Actions repository variable `NPM_TRUSTED_PUBLISHING` to `true`.
+3. Allow GitHub Actions to create release pull requests, or supply an appropriately scoped GitHub App or fine-grained token to Changesets.
+
+Trusted Publishing requires an OIDC-compatible npm CLI. The release workflow uses Node.js 24, installs npm 11.15 or newer, grants only the required job permissions, and performs no dependency-cache restore during publication.
 
 Add a Changeset to each pull request containing a user-visible package change:
 

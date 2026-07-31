@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Version or publish packages
+    if: vars.NPM_TRUSTED_PUBLISHING == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org
+      - name: Install an OIDC-compatible npm CLI
+        run: npm install --global npm@^11.15.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm size
+      - name: Create or update the release pull request
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          title: Release packages
+          commit: Version packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish packages with npm Trusted Publishing
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: pnpm release
+        env:
+          NPM_CONFIG_PROVENANCE: true
+      - name: Push package tags
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: git push origin --tags
+      - name: Create GitHub Releases
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          for tag in $(git tag --points-at HEAD); do
+            case "$tag" in
+              @schema-lens/*@*)
+                gh release view "$tag" >/dev/null 2>&1 ||
+                  gh release create "$tag" --verify-tag --generate-notes --title "$tag"
+                ;;
+            esac
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
