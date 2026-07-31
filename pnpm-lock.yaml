@@ -44,10 +44,10 @@ importers:
 
   examples/basic:
     dependencies:
-      '@schema-lens/core':
+      '@arts-link/schema-lens-core':
         specifier: workspace:^
         version: link:../../packages/core
-      '@schema-lens/overlay':
+      '@arts-link/schema-lens-overlay':
         specifier: workspace:^
         version: link:../../packages/overlay
 
@@ -55,7 +55,7 @@ importers:
 
   packages/overlay:
     dependencies:
-      '@schema-lens/core':
+      '@arts-link/schema-lens-core':
         specifier: workspace:^
         version: link:../core
 

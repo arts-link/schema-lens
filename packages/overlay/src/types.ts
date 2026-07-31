@@ -1,4 +1,4 @@
-import type { InspectionOptions, InspectionResult } from "@schema-lens/core";
+import type { InspectionOptions, InspectionResult } from "@arts-link/schema-lens-core";
 
 export interface SchemaInspectorOptions extends InspectionOptions {
   document: Document;

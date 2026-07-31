@@ -4,8 +4,8 @@ import { readFile } from "node:fs/promises";
 import { URL } from "node:url";
 
 const bundles = [
-  ["@schema-lens/core", new URL("../packages/core/dist/index.js", import.meta.url)],
-  ["@schema-lens/overlay", new URL("../packages/overlay/dist/index.js", import.meta.url)],
+  ["@arts-link/schema-lens-core", new URL("../packages/core/dist/index.js", import.meta.url)],
+  ["@arts-link/schema-lens-overlay", new URL("../packages/overlay/dist/index.js", import.meta.url)],
 ];
 
 for (const [name, url] of bundles) {

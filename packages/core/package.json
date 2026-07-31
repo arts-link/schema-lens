@@ -1,5 +1,5 @@
 {
-  "name": "@schema-lens/core",
+  "name": "@arts-link/schema-lens-core",
   "version": "0.1.0",
   "description": "Framework-independent JSON-LD inspection and diagnostics.",
   "license": "MIT",

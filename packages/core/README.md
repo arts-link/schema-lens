@@ -1,4 +1,4 @@
-# `@schema-lens/core`
+# `@arts-link/schema-lens-core`
 
 Framework-independent collection, parsing, normalization, reference graph construction, diagnostics, serialization, and DOM observation for Schema.org JSON-LD.
 
@@ -10,7 +10,7 @@ import {
   inspectDocument,
   inspectScripts,
   serializeInspectionResult,
-} from "@schema-lens/core";
+} from "@arts-link/schema-lens-core";
 ```
 
 - `inspectDocument(document, options?)` inspects all exact `script[type="application/ld+json"]` matches.

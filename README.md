@@ -8,11 +8,11 @@ The project is framework-independent. The core package can be used by themes, CM
 
 ## Packages
 
-| Package                      | Purpose                                                                                                   |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `@schema-lens/core`          | Parsing, normalization, graph construction, diagnostics, custom rules, serialization, and DOM observation |
-| `@schema-lens/overlay`       | Framework-free, accessible browser inspector built on the core package                                    |
-| `@schema-lens/example-basic` | Private Vite application for manual testing                                                               |
+| Package                                | Purpose                                                                                                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `@arts-link/schema-lens-core`          | Parsing, normalization, graph construction, diagnostics, custom rules, serialization, and DOM observation |
+| `@arts-link/schema-lens-overlay`       | Framework-free, accessible browser inspector built on the core package                                    |
+| `@arts-link/schema-lens-example-basic` | Private Vite application for manual testing                                                               |
 
 ## Installation
 
@@ -26,8 +26,8 @@ pnpm build
 After publication:
 
 ```sh
-pnpm add @schema-lens/core
-pnpm add @schema-lens/overlay
+pnpm add @arts-link/schema-lens-core
+pnpm add @arts-link/schema-lens-overlay
 ```
 
 Both public packages are ESM-only and include TypeScript declarations.
@@ -35,7 +35,7 @@ Both public packages are ESM-only and include TypeScript declarations.
 ## Core usage
 
 ```ts
-import { inspectDocument, serializeInspectionResult } from "@schema-lens/core";
+import { inspectDocument, serializeInspectionResult } from "@arts-link/schema-lens-core";
 
 const result = inspectDocument(document);
 
@@ -46,7 +46,7 @@ console.log(JSON.stringify(serializeInspectionResult(result), null, 2));
 `inspectScripts` accepts an explicit iterable of `HTMLScriptElement` values when a consumer wants to inspect a subset:
 
 ```ts
-import { inspectScripts } from "@schema-lens/core";
+import { inspectScripts } from "@arts-link/schema-lens-core";
 
 const scripts = document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]');
 const result = inspectScripts(scripts);
@@ -55,7 +55,7 @@ const result = inspectScripts(scripts);
 ## Overlay usage
 
 ```ts
-import { createSchemaInspector } from "@schema-lens/overlay";
+import { createSchemaInspector } from "@arts-link/schema-lens-overlay";
 
 const inspector = createSchemaInspector({
   document,
@@ -72,7 +72,7 @@ The returned inspector exposes `open`, `close`, `toggle`, `refresh`, `getResult`
 Rules are explicitly scoped to one entity or the whole result. The engine assigns the registered rule ID to returned findings.
 
 ```ts
-import { inspectDocument, type InspectorRule } from "@schema-lens/core";
+import { inspectDocument, type InspectorRule } from "@arts-link/schema-lens-core";
 
 const rules: InspectorRule[] = [
   {
@@ -109,7 +109,7 @@ Custom IDs cannot use the reserved `schema-lens/` prefix. A rule exception becom
 ## Mutation observation
 
 ```ts
-import { createSchemaObserver } from "@schema-lens/core";
+import { createSchemaObserver } from "@arts-link/schema-lens-core";
 
 const observer = createSchemaObserver(
   document,
@@ -185,8 +185,8 @@ Because npm Trusted Publishing is configured per existing package, bootstrap eac
 ```sh
 pnpm install --frozen-lockfile
 pnpm build
-pnpm --filter @schema-lens/core publish --access public
-pnpm --filter @schema-lens/overlay publish --access public
+pnpm --filter @arts-link/schema-lens-core publish --access public
+pnpm --filter @arts-link/schema-lens-overlay publish --access public
 ```
 
 Complete npm's 2FA challenge for each publish. After the packages exist:
@@ -209,7 +209,7 @@ pnpm changeset
 - Unmatched absolute URLs are recorded as external rather than warned as unresolved.
 - Schema Lens includes only a small deterministic advisory set, not the complete Schema.org vocabulary.
 - Version 0.1 inspects browser DOM scripts rather than accepting arbitrary server-side JSON values.
-- The npm package names were unclaimed when release automation was configured; publishing still requires control of the `@schema-lens` npm scope.
+- The npm package names were unclaimed when release automation was configured; publishing requires membership in the `@arts-link` npm organization with package write access.
 - Browser compatibility is configured and tested in jsdom; the example still requires final manual verification in each supported browser before publication.
 
 ## Contributing

@@ -61,7 +61,7 @@ jobs:
         run: |
           for tag in $(git tag --points-at HEAD); do
             case "$tag" in
-              @schema-lens/*@*)
+              @arts-link/schema-lens-*@*)
                 gh release view "$tag" >/dev/null 2>&1 ||
                   gh release create "$tag" --verify-tag --generate-notes --title "$tag"
                 ;;

@@ -1,16 +1,16 @@
 {
-  "name": "@schema-lens/example-basic",
+  "name": "@arts-link/schema-lens-example-basic",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "pnpm --filter @schema-lens/core build && pnpm --filter @schema-lens/overlay build && vite",
+    "dev": "pnpm --filter @arts-link/schema-lens-core build && pnpm --filter @arts-link/schema-lens-overlay build && vite",
     "test": "vitest run --passWithNoTests",
-    "typecheck": "pnpm --filter @schema-lens/core build && pnpm --filter @schema-lens/overlay build && tsc -p tsconfig.json --noEmit"
+    "typecheck": "pnpm --filter @arts-link/schema-lens-core build && pnpm --filter @arts-link/schema-lens-overlay build && tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@schema-lens/core": "workspace:^",
-    "@schema-lens/overlay": "workspace:^"
+    "@arts-link/schema-lens-core": "workspace:^",
+    "@arts-link/schema-lens-overlay": "workspace:^"
   }
 }
