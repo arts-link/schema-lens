@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schema Lens — JSON-LD browser inspector</title>
+<meta name="description" content="Schema Lens is an open-source browser inspector for Schema.org JSON-LD with deterministic diagnostics and an optional accessible overlay.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Schema Lens",
+  "description": "An open-source browser inspector for Schema.org JSON-LD with deterministic diagnostics and an optional accessible overlay.",
+  "url": "https://arts-link.github.io/schema-lens/",
+  "codeRepository": "https://github.com/arts-link/schema-lens",
+  "license": "https://github.com/arts-link/schema-lens/blob/main/LICENSE",
+  "programmingLanguage": ["TypeScript", "JavaScript"],
+  "runtimePlatform": "Web browser"
+}
+</script>
+<script>
+window.__resources = {
+  "./SchemaLensPanel.dc.html": "assets/SchemaLensPanel.dc.html",
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "assets/react.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "assets/react-dom.production.min.js"
+};
+</script>
+<script src="assets/dc-runtime.js"></script>
+</head>
+<body>
+
+<x-dc>
+<helmet>
+  <style>/* Organic — design-system tokens and component classes. This file is the source of truth for the system's look; retune it here and see readme.md. */
+/* latin-ext */
+@font-face {
+  font-family: 'Caprasimo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/caprasimo-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Caprasimo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/caprasimo-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/nunito-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/nunito-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/nunito-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/nunito-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/nunito-latin-ext.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/nunito-latin.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root {
+  --color-bg: #f5ead8;
+  --color-surface: #ebddc5;
+  --color-text: #201e1d;
+  --color-accent: #c67139;
+  --color-accent-2: #7a8a5e;
+  --color-divider: color-mix(in srgb, #201e1d 16%, transparent);
+
+  /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
+     same step of any role matches the others in visual value. */
+  --color-neutral-100: #f9f4ed;
+  --color-neutral-200: #eee7db;
+  --color-neutral-300: #dcd3c4;
+  --color-neutral-400: #c0b6a5;
+  --color-neutral-500: #a19786;
+  --color-neutral-600: #82796a;
+  --color-neutral-700: #645c50;
+  --color-neutral-800: #474238;
+  --color-neutral-900: #2e2b25;
+
+  --color-accent-100: #fff2eb;
+  --color-accent-200: #ffe1d0;
+  --color-accent-300: #ffc6a5;
+  --color-accent-400: #f6a06b;
+  --color-accent-500: #d67f48;
+  --color-accent-600: #b2622d;
+  --color-accent-700: #8c491a;
+  --color-accent-800: #643312;
+  --color-accent-900: #402310;
+
+  --color-accent-2-100: #f0fae1;
+  --color-accent-2-200: #e1eecc;
+  --color-accent-2-300: #ccdbb2;
+  --color-accent-2-400: #aebf92;
+  --color-accent-2-500: #8fa073;
+  --color-accent-2-600: #728157;
+  --color-accent-2-700: #56633f;
+  --color-accent-2-800: #3d472b;
+  --color-accent-2-900: #272e1b;
+
+  --font-heading: "Caprasimo", system-ui, sans-serif;
+  --font-heading-weight: 400;
+  --font-body: "Figtree", system-ui, sans-serif;
+
+  --space-1: 4.4px;
+  --space-2: 8.8px;
+  --space-3: 13.2px;
+  --space-4: 17.6px;
+  --space-6: 26.4px;
+  --space-8: 35.2px;
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+
+  /* Elevation — derived from the ground: soft ink-tinted shadows on a
+     light theme, a hairline edge + ambient darkness on a dark one. */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2e2b25 14%, transparent);
+  --shadow-md: 0 3px 10px color-mix(in srgb, #2e2b25 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #2e2b25 22%, transparent);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+
+.washed{filter:saturate(0.6) contrast(0.85) brightness(1.1) opacity(0.94)}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Components — built with the tokens above. Plain CSS
+   on plain HTML: no JavaScript, no build step. Each class is documented in
+   readme.md and demonstrated in foundations/ and components/.
+   ══════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; }
+h6 { letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+figcaption {
+  font-size: 11px; margin-top: var(--space-1);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* — rules — */
+.hr {
+  height: 1px; border: 0; margin: var(--space-4) 0;
+  background: var(--color-divider);
+}
+
+/* — buttons — */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 14px; line-height: 1.2; color: var(--color-text); /* matches the .input's 14px —
+     the pair sits side by side in sign-up rows */
+  background: transparent; border: 1px solid transparent;
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  border-radius: var(--radius-md);
+}
+.btn svg { display: block; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--color-accent); color: var(--color-bg); }
+.btn-primary:hover { background: var(--color-accent-600); }
+.btn-primary:active { background: var(--color-accent-700); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
+.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* — forms — */
+.field > label {
+  display: block; font-size: 12px; margin-bottom: 5px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.input {
+  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
+  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 90px; resize: vertical; }
+.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.radio input, .seg-opt input {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.radio .dot {
+  width: 16px; height: 16px; flex: none; border-radius: 50%;
+  border: 1.5px solid var(--color-divider);
+}
+.radio:hover .dot { border-color: var(--color-accent); }
+.radio input:checked + .dot {
+  border-color: var(--color-accent); background: var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-bg);
+}
+.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.seg {
+  display: inline-flex; overflow: hidden;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.seg-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; font-size: 13px; cursor: pointer;
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { background: var(--color-accent); color: var(--color-bg); }
+.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* — cards — */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface);
+}
+.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
+.card-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 17px; line-height: 1.2;
+}
+.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
+.card-meta {
+  display: flex; align-items: center; gap: 6px; font-size: 11px;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* — tags — */
+.tag {
+  display: inline-flex; align-items: center; font-size: 11px;
+  letter-spacing: 0.02em; padding: 3px 10px;
+  border-radius: calc(var(--radius-md) * 0.75);
+}
+.tag-accent { background: var(--color-accent-100); color: var(--color-accent-800); }
+.tag-accent-2 { background: var(--color-accent-2-100); color: var(--color-accent-2-800); }
+.tag-neutral { background: var(--color-neutral-100); color: var(--color-neutral-800); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+
+/* — navigation — */
+.nav {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: none;
+}
+.nav-brand {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 18px; margin-right: auto;
+}
+.nav a { color: inherit; text-decoration: none; font-size: 14px; }
+.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
+
+/* — tables — */
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding: var(--space-2); border-bottom: 1px solid var(--color-divider);
+}
+.table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
+}
+.table tbody tr:hover { background: color-mix(in srgb, var(--color-text) 4%, transparent); }
+
+/* — dialog — */
+.dialog-backdrop {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
+}
+.dialog {
+  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); border-radius: var(--radius-lg);
+  background: var(--color-surface); box-shadow: var(--shadow-lg);
+}
+.dialog-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 20px;
+}
+.dialog-body { font-size: 14px; opacity: 0.85; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
+
+/* — rounded frame: everything softens, small controls go pill — */
+.card, .dialog { border-radius: calc(var(--radius-lg) * 1.15); }
+.btn, .tag, .seg, .input { border-radius: 999px; }
+.input { padding-inline: 14px; }
+
+</style>
+  <script src="assets/organic.js"></script>
+  <style>
+    body { margin: 0; background: var(--color-bg); }
+    a { color: var(--color-accent-700); text-decoration: none; }
+    a:hover { color: var(--color-accent-600); text-decoration: underline; }
+  </style>
+</helmet>
+<div data-screen-label="Landing page" style="width:100%;max-width:1440px;margin:0 auto;background:var(--color-bg);overflow:hidden">
+
+      <nav class="nav" style="padding:22px 56px;gap:var(--space-6)">
+        <span class="nav-brand" style="display:flex;align-items:center;gap:10px;font-size:19px">
+          <svg width="30" height="30" sc-camel-view-box="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="29" fill="none" stroke="var(--color-accent)" stroke-width="3.5"></circle>
+            <circle cx="32" cy="32" r="14" fill="var(--color-accent-2)"></circle>
+            <circle cx="32" cy="3" r="5" fill="var(--color-accent)"></circle>
+            <circle cx="57" cy="46.5" r="5" fill="var(--color-accent)"></circle>
+            <circle cx="7" cy="46.5" r="5" fill="var(--color-accent)"></circle>
+          </svg>
+          Schema Lens
+        </span>
+        <a href="https://github.com/arts-link/schema-lens#core-usage">Core</a>
+        <a href="https://github.com/arts-link/schema-lens#overlay-usage">Overlay</a>
+        <a href="https://github.com/arts-link/schema-lens#diagnostics">Diagnostics</a>
+        <a href="https://github.com/arts-link/schema-lens">GitHub</a>
+        <a class="btn btn-primary" href="https://github.com/arts-link/schema-lens#installation" style="font-size:14px">Install</a>
+      </nav>
+
+      <div style="position:relative;padding:72px 56px 64px;overflow:hidden">
+        <div style="position:absolute;top:-140px;right:-120px;width:460px;height:460px;border-radius:50%;background:var(--color-accent-2-200)"></div>
+        <div style="position:absolute;top:120px;right:180px;width:180px;height:180px;border-radius:50%;background:var(--color-accent-200)"></div>
+        <div style="position:relative;max-width:760px">
+          <div style="display:flex;gap:8px;margin-bottom:var(--space-4)">
+            <span class="tag tag-outline">Open source</span>
+            <span class="tag tag-neutral">MIT</span>
+            <span class="tag tag-neutral">ESM-only</span>
+            <span class="tag tag-neutral">No runtime dependencies</span>
+          </div>
+          <h1 style="font-size:76px;line-height:1.0;margin:0 0 var(--space-4)">A browser-based inspector for Schema.org JSON‑LD.</h1>
+          <p style="font-size:20px;line-height:1.6;max-width:640px;margin:0 0 var(--space-6);text-wrap:pretty">Collect every script in the document. Parse each one independently. Normalize the entities, connect exact <code style="font-family:ui-monospace,Menlo,monospace;font-size:0.9em;background:var(--color-surface);padding:2px 6px;border-radius:6px">@id</code> references, and read deterministic diagnostics — without sending page data anywhere.</p>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3)">
+            <div style="display:flex;align-items:center;gap:14px;background:var(--color-neutral-900);color:var(--color-neutral-100);border-radius:999px;padding:14px 14px 14px 24px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px">
+              <span style="color:var(--color-accent-300)">$</span>
+              <span>pnpm add @arts-link/schema-lens-core</span>
+              <button type="button" class="btn" data-copy-command="pnpm add @arts-link/schema-lens-core" style="background:var(--color-neutral-800);color:var(--color-neutral-100);font-size:12px;padding:6px 14px" style-hover="background:var(--color-accent-700)">Copy</button>
+            </div>
+            <a class="btn btn-secondary" href="https://github.com/arts-link/schema-lens#installation">Add the overlay</a>
+            <a class="btn btn-ghost" href="https://github.com/arts-link/schema-lens#readme">Read the docs →</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#0b0d11;padding:56px 56px 0">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 520px;gap:var(--space-8);align-items:end">
+          <div style="padding-bottom:56px;color:var(--color-neutral-200)">
+            <h6 style="color:var(--color-accent-300);margin:0 0 var(--space-3)">The overlay</h6>
+            <h2 style="color:var(--color-neutral-100);margin:0 0 var(--space-4);font-size:40px">Framework-free, accessible, isolated.</h2>
+            <p style="font-size:16px;opacity:0.75;max-width:460px;margin:0 0 var(--space-4)">Rendered into a Shadow DOM host with its own styles, a resizable panel, keyboard focus handling and a polite live region. Nothing leaks into the page and the page’s JSON‑LD is never modified.</p>
+            <div style="display:grid;gap:10px;font-size:14px;opacity:0.85">
+              <span>Summary, entities and scripts as three tabs</span>
+              <span>Grouped by type, with per-entity findings and references</span>
+              <span>Copy the whole inspection or a single entity as JSON</span>
+              <span><code style="font-family:ui-monospace,Menlo,monospace">Escape</code> closes; focus returns where it was</span>
+            </div>
+          </div>
+          <div style="border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;height:660px;background:#101318;box-shadow:var(--shadow-lg)">
+            <dc-import name="SchemaLensPanel" hint-size="520px,660px" style="width:520px;height:660px"></dc-import>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:64px 56px">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-8) var(--space-8)">
+          <div style="border-top:2px solid var(--color-accent);padding-top:var(--space-3)">
+            <h3 style="margin:0 0 6px">Independent parsing</h3>
+            <p style="margin:0;font-size:15px;opacity:0.8">Every script is parsed on its own. One malformed script becomes a contained error instead of an empty result.</p>
+          </div>
+          <div style="border-top:2px solid var(--color-accent-2);padding-top:var(--space-3)">
+            <h3 style="margin:0 0 6px">Exact <code style="font-family:ui-monospace,Menlo,monospace;font-size:0.8em">@id</code> linking</h3>
+            <p style="margin:0;font-size:15px;opacity:0.8">References resolve by exact string match. Unmatched absolute URLs are recorded as external rather than warned as unresolved.</p>
+          </div>
+          <div style="border-top:2px solid var(--color-accent-2);padding-top:var(--space-3)">
+            <h3 style="margin:0 0 6px">Deterministic diagnostics</h3>
+            <p style="margin:0;font-size:15px;opacity:0.8">Unusable scripts are errors, likely data defects are warnings, hygiene and optional guidance is informational.</p>
+          </div>
+          <div style="border-top:2px solid var(--color-accent);padding-top:var(--space-3)">
+            <h3 style="margin:0 0 6px">Mutation observation</h3>
+            <p style="margin:0;font-size:15px;opacity:0.8">Reacts to script insertion, removal, text changes and <code style="font-family:ui-monospace,Menlo,monospace;font-size:0.8em">type</code> attribute changes. It does not poll.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--color-surface);padding:64px 56px">
+        <h2 style="margin:0 0 var(--space-2)">Four sources of information</h2>
+        <p class="text-muted" style="font-size:15px;margin:0 0 var(--space-6);max-width:560px">Every finding carries a rule ID and a JSON path, so a parse failure never reads like an opinion.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-3)">
+          <div style="background:var(--color-bg);border-radius:calc(var(--radius-lg) * 1.15);padding:var(--space-4)">
+            <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--color-accent);color:var(--color-bg);font-family:var(--font-heading);margin-bottom:var(--space-3)">1</span>
+            <h4 style="margin:0 0 6px">JSON parsing errors</h4>
+            <p style="margin:0;font-size:13px;opacity:0.8">Empty, malformed, or an unsupported top-level value.</p>
+          </div>
+          <div style="background:var(--color-bg);border-radius:calc(var(--radius-lg) * 1.15);padding:var(--space-4)">
+            <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--color-accent-2);color:var(--color-bg);font-family:var(--font-heading);margin-bottom:var(--space-3)">2</span>
+            <h4 style="margin:0 0 6px">Structure and graph</h4>
+            <p style="margin:0;font-size:13px;opacity:0.8">Invalid <code style="font-family:ui-monospace,Menlo,monospace;font-size:0.85em">@graph</code> or identity fields, duplicates, ambiguous and unresolved links, value shapes.</p>
+          </div>
+          <div style="background:var(--color-bg);border-radius:calc(var(--radius-lg) * 1.15);padding:var(--space-4)">
+            <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--color-accent-300);color:var(--color-accent-900);font-family:var(--font-heading);margin-bottom:var(--space-3)">3</span>
+            <h4 style="margin:0 0 6px">Schema.org advisories</h4>
+            <p style="margin:0;font-size:13px;opacity:0.8">A small deterministic set for common types. Informational, not requirements.</p>
+          </div>
+          <div style="background:var(--color-bg);border-radius:calc(var(--radius-lg) * 1.15);padding:var(--space-4)">
+            <span style="display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--color-accent-2-300);color:var(--color-accent-2-900);font-family:var(--font-heading);margin-bottom:var(--space-3)">4</span>
+            <h4 style="margin:0 0 6px">Consumer rules</h4>
+            <p style="margin:0;font-size:13px;opacity:0.8">Your own checks, scoped to one entity or the whole result.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:64px 56px">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6)">
+          <div>
+            <h2 style="margin:0 0 var(--space-4)">Register a project rule</h2>
+            <pre style="margin:0;background:var(--color-neutral-900);color:var(--color-neutral-100);border-radius:var(--radius-lg);padding:22px 24px;font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere"><span style="color:var(--color-accent-2-300)">const</span> rules: InspectorRule[] = [
+  {
+    id: <span style="color:var(--color-accent-300)">"project/article-section"</span>,
+    scope: <span style="color:var(--color-accent-300)">"entity"</span>,
+    inspect({ entity }) {
+      <span style="color:var(--color-accent-2-300)">if</span> (entity.types.includes(<span style="color:var(--color-accent-300)">"Article"</span>))
+        <span style="color:var(--color-accent-2-300)">return</span> [{ severity: <span style="color:var(--color-accent-300)">"info"</span>, message: <span style="color:var(--color-accent-300)">"…"</span> }];
+      <span style="color:var(--color-accent-2-300)">return</span> [];
+    },
+  },
+];
+
+inspectDocument(document, { rules });</pre>
+            <p class="text-muted" style="font-size:13px;margin:var(--space-3) 0 0">Custom IDs cannot use the reserved <code style="font-family:ui-monospace,Menlo,monospace">schema-lens/</code> prefix. A rule exception becomes a contained diagnostic and does not stop other rules.</p>
+          </div>
+          <div>
+            <h2 style="margin:0 0 var(--space-4)">Watch the document</h2>
+            <pre style="margin:0;background:var(--color-neutral-900);color:var(--color-neutral-100);border-radius:var(--radius-lg);padding:22px 24px;font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere"><span style="color:var(--color-accent-2-300)">const</span> observer = createSchemaObserver(
+  document,
+  (result) =&gt; {
+    console.log(result.summary);
+  },
+  { debounceMs: 100 },
+);
+
+observer.refresh();
+observer.disconnect();</pre>
+            <div style="margin-top:var(--space-4);background:var(--color-accent-2-100);border-radius:calc(var(--radius-lg) * 1.15);padding:var(--space-4)">
+              <h4 style="margin:0 0 var(--space-2)">Security and privacy</h4>
+              <div style="display:grid;gap:8px;font-size:14px">
+                <span>No runtime network requests are made.</span>
+                <span>Schema data is never transmitted by the packages.</span>
+                <span>Script text is parsed strictly with <code style="font-family:ui-monospace,Menlo,monospace;font-size:0.9em">JSON.parse</code> and never executed.</span>
+                <span>Values render as text nodes, not injected HTML.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 56px 64px">
+        <h2 style="margin:0 0 var(--space-4)">Packages</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3)">
+          <article class="card elev-sm"><span class="card-kicker">Public · ESM</span><h3 class="card-title" style="font-family:ui-monospace,Menlo,monospace;font-size:14px">@arts-link/schema-lens-core</h3><p class="card-body">Parsing, normalization, graph construction, diagnostics, custom rules, serialization, and DOM observation.</p></article>
+          <article class="card elev-sm"><span class="card-kicker">Public · ESM</span><h3 class="card-title" style="font-family:ui-monospace,Menlo,monospace;font-size:14px">@arts-link/schema-lens-overlay</h3><p class="card-body">Framework-free, accessible browser inspector built on the core package.</p></article>
+          <article class="card elev-sm"><span class="card-kicker">Private</span><h3 class="card-title" style="font-family:ui-monospace,Menlo,monospace;font-size:14px">@arts-link/schema-lens-example-basic</h3><p class="card-body">Vite application for manual testing: linked entities, duplicate IDs, an unresolved reference and malformed JSON.</p></article>
+        </div>
+        <p class="text-muted" style="font-size:13px;margin:var(--space-3) 0 0">Both public packages include TypeScript declarations. Version 0.1 targets current Chrome, Firefox, Safari and Edge.</p>
+      </div>
+
+      <footer style="background:var(--color-neutral-900);color:var(--color-neutral-200);padding:48px 56px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-8)">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-size:18px;color:var(--color-neutral-100);margin-bottom:var(--space-3)">
+              <svg width="26" height="26" sc-camel-view-box="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="32" r="29" fill="none" stroke="var(--color-accent-400)" stroke-width="3.5"></circle>
+                <circle cx="32" cy="32" r="14" fill="var(--color-accent-2-400)"></circle>
+                <circle cx="32" cy="3" r="5" fill="var(--color-accent-400)"></circle>
+                <circle cx="57" cy="46.5" r="5" fill="var(--color-accent-400)"></circle>
+                <circle cx="7" cy="46.5" r="5" fill="var(--color-accent-400)"></circle>
+              </svg>
+              Schema Lens
+            </div>
+            <p style="margin:0;font-size:13px;opacity:0.7;max-width:520px">Schema Lens is a debugging aid. It does not reproduce Google Rich Results Test and cannot guarantee search-engine eligibility.</p>
+          </div>
+          <div style="display:flex;gap:var(--space-6);font-size:14px">
+            <div style="display:grid;gap:8px"><span style="color:var(--color-neutral-400)">Project</span><a href="https://github.com/arts-link/schema-lens" style="color:var(--color-accent-300)">GitHub</a><a href="https://github.com/arts-link/schema-lens#contributing" style="color:var(--color-accent-300)">Contributing</a><a href="https://github.com/arts-link/schema-lens/blob/main/LICENSE" style="color:var(--color-accent-300)">MIT license</a></div>
+            <div style="display:grid;gap:8px"><span style="color:var(--color-neutral-400)">Docs</span><a href="https://github.com/arts-link/schema-lens#core-usage" style="color:var(--color-accent-300)">Core</a><a href="https://github.com/arts-link/schema-lens#overlay-usage" style="color:var(--color-accent-300)">Overlay</a><a href="https://github.com/arts-link/schema-lens#custom-rules" style="color:var(--color-accent-300)">Custom rules</a></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+</x-dc>
+<script data-dc-script="" type="text/plain"></script>
+<script>
+document.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-copy-command]");
+  if (!button) return;
+
+  const command = button.dataset.copyCommand;
+  const originalLabel = button.textContent;
+
+  try {
+    await navigator.clipboard.writeText(command);
+    button.textContent = "Copied";
+    setTimeout(() => {
+      button.textContent = originalLabel;
+    }, 1500);
+  } catch (error) {
+    console.error("Could not copy the install command.", error);
+  }
+});
+</script>
+
+
+</body></html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:100%;height:100%">
+<sc-if value="{{ open }}" hint-placeholder-val="{{ true }}">
+<section role="dialog" aria-modal="false" aria-label="Schema Lens" style="position:relative;display:grid;grid-template-rows:auto auto minmax(0,1fr);width:100%;height:100%;overflow:hidden;border-left:1px solid #303641;background:#101318;color:#f5f7fa;box-shadow:-12px 0 36px rgb(0 0 0 / 30%);font:14px/1.45 ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-sizing:border-box">
+  <div role="separator" aria-orientation="vertical" aria-label="Resize Schema Lens panel" tabindex="0" style="position:absolute;z-index:2;inset:0 auto 0 -5px;width:10px;cursor:ew-resize;touch-action:none"></div>
+
+  <header style="display:grid;gap:10px;padding:14px 16px 12px;border-bottom:1px solid #303641">
+    <div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+      <h1 style="margin:0;font-size:17px;font-family:inherit;font-weight:700;letter-spacing:0">Schema Lens</h1>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button type="button" aria-label="Refresh inspection" onClick="{{ onRefresh }}" style="border:1px solid transparent;border-radius:7px;background:transparent;color:inherit;cursor:pointer;min-width:32px;min-height:32px;padding:4px 8px;font:inherit" style-hover="background:rgb(255 255 255 / 8%)">Refresh</button>
+        <button type="button" aria-label="Copy full inspection" onClick="{{ onCopy }}" style="border:1px solid transparent;border-radius:7px;background:transparent;color:inherit;cursor:pointer;min-width:32px;min-height:32px;padding:4px 8px;font:inherit" style-hover="background:rgb(255 255 255 / 8%)">Copy</button>
+        <button type="button" aria-label="Close Schema Lens" onClick="{{ onClose }}" style="border:1px solid transparent;border-radius:7px;background:transparent;color:inherit;cursor:pointer;min-width:32px;min-height:32px;padding:4px 8px;font:inherit" style-hover="background:rgb(255 255 255 / 8%)">Close</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#aeb6c4;font-size:12px">
+      <sc-for list="{{ counts }}" as="count" hint-placeholder-count="3">
+        <span style="border:1px solid #303641;border-radius:999px;padding:2px 8px">{{ count.text }}</span>
+      </sc-for>
+    </div>
+    <div role="status" aria-live="polite" style="min-height:1.4em;color:#aeb6c4;font-size:12px">{{ liveMessage }}</div>
+  </header>
+
+  <div role="tablist" style="display:flex;align-items:center;gap:8px;overflow-x:auto;padding:8px 12px;border-bottom:1px solid #303641;background:#171b22">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="3">
+      <button type="button" role="tab" aria-selected="{{ tab.selected }}" aria-label="{{ tab.aria }}" onClick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+    </sc-for>
+  </div>
+
+  <main style="min-height:0;overflow:auto">
+    <sc-if value="{{ isSummary }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;gap:16px;padding:16px">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+          <sc-for list="{{ summaryCards }}" as="card" hint-placeholder-count="6">
+            <div style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+              <strong style="display:block;font-size:22px">{{ card.value }}</strong>
+              <span style="color:#aeb6c4">{{ card.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <section style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+          <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">Types found</h2>
+          <p style="margin:0">{{ typesText }}</p>
+        </section>
+        <section style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+          <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">Page findings</h2>
+          <div style="display:grid;gap:10px">
+            <sc-for list="{{ pageFindings }}" as="finding" hint-placeholder-count="4">
+              <div data-severity="{{ finding.severity }}" style="{{ finding.style }}">
+                <p style="margin:0">{{ finding.message }}</p>
+                <div style="display:flex;align-items:center;gap:8px;color:#aeb6c4;font-size:11px">
+                  <strong style="{{ finding.severityStyle }}">{{ finding.severityLabel }}</strong>
+                  <span>{{ finding.location }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isEntities }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:minmax(150px,42%) minmax(0,1fr);min-height:100%">
+        <nav aria-label="Schema entities" style="overflow:auto;border-right:1px solid #303641;padding:12px">
+          <sc-for list="{{ groups }}" as="group" hint-placeholder-count="6">
+            <section style="{{ group.style }}">
+              <h3 style="margin:0;font-size:14px;font-family:inherit;font-weight:700">{{ group.heading }}</h3>
+              <sc-for list="{{ group.items }}" as="item" hint-placeholder-count="2">
+                <button type="button" aria-label="{{ item.aria }}" aria-current="{{ item.current }}" onClick="{{ item.onClick }}" style="{{ item.style }}">
+                  <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ item.label }}</span>
+                  <span style="display:flex;align-items:center;gap:8px;color:#aeb6c4;font-size:11px">{{ item.meta }}</span>
+                </button>
+              </sc-for>
+            </section>
+          </sc-for>
+        </nav>
+        <section style="min-width:0;overflow:auto;padding:16px">
+          <div style="display:grid;gap:16px">
+            <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">{{ detail.heading }}</h2>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button type="button" aria-label="Copy selected entity JSON" onClick="{{ onCopyEntity }}" style="border:1px solid #303641;border-radius:7px;background:#171b22;color:inherit;cursor:pointer;padding:6px 10px;font:inherit" style-hover="background:rgb(255 255 255 / 8%)">Copy JSON</button>
+              <button type="button" aria-label="Log source script element" onClick="{{ onLogSource }}" style="border:1px solid #303641;border-radius:7px;background:#171b22;color:inherit;cursor:pointer;padding:6px 10px;font:inherit" style-hover="background:rgb(255 255 255 / 8%)">Log source</button>
+            </div>
+            <dl style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:0">
+              <sc-for list="{{ detail.defs }}" as="def" hint-placeholder-count="4">
+                <dt style="color:#aeb6c4;margin:0">{{ def.term }}</dt>
+                <dd style="margin:0;overflow-wrap:anywhere">{{ def.value }}</dd>
+              </sc-for>
+            </dl>
+            <section style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+              <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">JSON</h2>
+              <pre style="margin:0;max-height:360px;overflow:auto;border:1px solid #303641;border-radius:8px;background:#0b0d11;padding:10px;color:#dbe7f5;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere">{{ detail.json }}</pre>
+            </section>
+            <section style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+              <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">Findings</h2>
+              <sc-if value="{{ detail.hasFindings }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;gap:10px">
+                  <sc-for list="{{ detail.findings }}" as="finding" hint-placeholder-count="1">
+                    <div data-severity="{{ finding.severity }}" style="{{ finding.style }}">
+                      <p style="margin:0">{{ finding.message }}</p>
+                      <div style="display:flex;align-items:center;gap:8px;color:#aeb6c4;font-size:11px">
+                        <strong style="{{ finding.severityStyle }}">{{ finding.severityLabel }}</strong>
+                        <span>{{ finding.location }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ detail.noFindings }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0;color:#aeb6c4;padding:24px 4px;text-align:center">No findings.</p>
+              </sc-if>
+            </section>
+            <section style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+              <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">Incoming references</h2>
+              <sc-if value="{{ detail.hasInbound }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;gap:10px">
+                  <sc-for list="{{ detail.inbound }}" as="ref" hint-placeholder-count="1">
+                    <div style="border-left:3px solid #87d7c4;padding:8px 10px;background:rgb(255 255 255 / 4%)">
+                      <p style="margin:0">{{ ref.targetId }}</p>
+                      <div style="display:flex;align-items:center;gap:8px;color:#aeb6c4;font-size:11px">{{ ref.meta }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ detail.noInbound }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0;color:#aeb6c4;padding:24px 4px;text-align:center">No incoming references.</p>
+              </sc-if>
+            </section>
+            <section style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+              <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">Outgoing references</h2>
+              <sc-if value="{{ detail.hasOutbound }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;gap:10px">
+                  <sc-for list="{{ detail.outbound }}" as="ref" hint-placeholder-count="1">
+                    <div style="border-left:3px solid #87d7c4;padding:8px 10px;background:rgb(255 255 255 / 4%)">
+                      <p style="margin:0">{{ ref.targetId }}</p>
+                      <div style="display:flex;align-items:center;gap:8px;color:#aeb6c4;font-size:11px">{{ ref.meta }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ detail.noOutbound }}" hint-placeholder-val="{{ false }}">
+                <p style="margin:0;color:#aeb6c4;padding:24px 4px;text-align:center">No outgoing references.</p>
+              </sc-if>
+            </section>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isScripts }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;gap:10px;padding:16px">
+        <sc-for list="{{ scripts }}" as="script" hint-placeholder-count="4">
+          <article style="border:1px solid #303641;border-radius:10px;background:#171b22;padding:12px">
+            <h2 style="margin:0;font-size:16px;font-family:inherit;font-weight:700">{{ script.heading }}</h2>
+            <p style="margin:0;color:#aeb6c4">{{ script.meta }}</p>
+            <button type="button" aria-label="{{ script.aria }}" onClick="{{ script.onLog }}" style="border:1px solid #303641;border-radius:7px;background:#171b22;color:inherit;cursor:pointer;padding:6px 10px;font:inherit;margin:8px 0" style-hover="background:rgb(255 255 255 / 8%)">Log source</button>
+            <sc-if value="{{ script.hasFindings }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;gap:10px">
+                <sc-for list="{{ script.findings }}" as="finding" hint-placeholder-count="1">
+                  <div data-severity="{{ finding.severity }}" style="{{ finding.style }}">
+                    <p style="margin:0">{{ finding.message }}</p>
+                    <div style="display:flex;align-items:center;gap:8px;color:#aeb6c4;font-size:11px">
+                      <strong style="{{ finding.severityStyle }}">{{ finding.severityLabel }}</strong>
+                      <span>{{ finding.location }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ script.noFindings }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0;color:#aeb6c4;padding:24px 4px;text-align:center">No findings.</p>
+            </sc-if>
+            <pre style="margin:10px 0 0;max-height:360px;overflow:auto;border:1px solid #303641;border-radius:8px;background:#0b0d11;padding:10px;color:#dbe7f5;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere">{{ script.raw }}</pre>
+          </article>
+        </sc-for>
+      </div>
+    </sc-if>
+  </main>
+</section>
+</sc-if>
+<sc-if value="{{ closed }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;place-items:center;width:100%;height:100%;background:#101318;border-left:1px solid #303641;font:14px/1.45 ui-sans-serif,-apple-system,sans-serif">
+  <button type="button" onClick="{{ onOpen }}" style="border:1px solid #303641;border-radius:7px;background:#171b22;color:#f5f7fa;cursor:pointer;padding:8px 14px;font:inherit" style-hover="background:rgb(255 255 255 / 8%)">Open inspector</button>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:480,&quot;height&quot;:760}}">
+const ARTICLE = {
+  "@id": "#article",
+  "@type": ["Article", "BlogPosting"],
+  headline: "Inspecting JSON-LD in the browser",
+  datePublished: "2026-07-30",
+  author: { "@id": "#person" },
+  publisher: { "@id": "#organization" },
+  mainEntityOfPage: { "@id": "#page" },
+};
+const PAGE = { "@id": "#page", "@type": "WebPage", name: "Schema Lens example", isPartOf: { "@id": "#website" } };
+const SITE = { "@id": "#website", "@type": "WebSite", name: "Schema Lens", url: "https://example.com/" };
+const ORG = { "@id": "#organization", "@type": "Organization", name: "Example Organization" };
+const PERSON = { "@id": "#person", "@type": "Person", name: "Ada Example" };
+const MISSING = { "@id": "#missing-owner", "@type": "WebPage", name: "Unresolved reference example", about: { "@id": "#not-defined" } };
+const DUP1 = { "@id": "#duplicate", "@type": "Organization", name: "First definition" };
+const DUP2 = { "@id": "#duplicate", "@type": "Organization", name: "Conflicting definition" };
+
+const CONFLICT = (path) => ({
+  severity: "warning",
+  message: 'Multiple, potentially conflicting entities define @id "#duplicate".',
+  ruleId: "schema-lens/conflicting-id",
+  path,
+});
+const UNRESOLVED = {
+  severity: "warning",
+  message: 'No local entity defines @id "#not-defined".',
+  ruleId: "schema-lens/unresolved-reference",
+  path: "/@graph/5/about",
+};
+const INVALID_JSON = {
+  severity: "error",
+  message: "JSON-LD could not be parsed: Unexpected end of JSON input",
+  ruleId: "schema-lens/invalid-json",
+  path: "",
+};
+
+const ENTITIES = [
+  { key: "0:/@graph/0", label: "Inspecting JSON-LD in the browser", types: ["Article", "BlogPosting"], id: "#article", scriptIndex: 0, path: "/@graph/0", value: ARTICLE, findings: [],
+    inbound: [], outbound: [
+      { targetId: "#person", status: "Resolved", propertyPath: "/@graph/0/author" },
+      { targetId: "#organization", status: "Resolved", propertyPath: "/@graph/0/publisher" },
+      { targetId: "#page", status: "Resolved", propertyPath: "/@graph/0/mainEntityOfPage" },
+    ] },
+  { key: "0:/@graph/1", label: "Schema Lens example", types: ["WebPage"], id: "#page", scriptIndex: 0, path: "/@graph/1", value: PAGE, findings: [],
+    inbound: [{ targetId: "#page", status: "Resolved", propertyPath: "/@graph/0/mainEntityOfPage" }],
+    outbound: [{ targetId: "#website", status: "Resolved", propertyPath: "/@graph/1/isPartOf" }] },
+  { key: "0:/@graph/2", label: "Schema Lens", types: ["WebSite"], id: "#website", scriptIndex: 0, path: "/@graph/2", value: SITE, findings: [],
+    inbound: [{ targetId: "#website", status: "Resolved", propertyPath: "/@graph/1/isPartOf" }], outbound: [] },
+  { key: "0:/@graph/3", label: "Example Organization", types: ["Organization"], id: "#organization", scriptIndex: 0, path: "/@graph/3", value: ORG, findings: [],
+    inbound: [{ targetId: "#organization", status: "Resolved", propertyPath: "/@graph/0/publisher" }], outbound: [] },
+  { key: "0:/@graph/4", label: "Ada Example", types: ["Person"], id: "#person", scriptIndex: 0, path: "/@graph/4", value: PERSON, findings: [],
+    inbound: [{ targetId: "#person", status: "Resolved", propertyPath: "/@graph/0/author" }], outbound: [] },
+  { key: "0:/@graph/5", label: "Unresolved reference example", types: ["WebPage"], id: "#missing-owner", scriptIndex: 0, path: "/@graph/5", value: MISSING, findings: [UNRESOLVED],
+    inbound: [], outbound: [{ targetId: "#not-defined", status: "Unresolved", propertyPath: "/@graph/5/about" }] },
+  { key: "1:", label: "First definition", types: ["Organization"], id: "#duplicate", scriptIndex: 1, path: "", value: DUP1, findings: [CONFLICT("/@id")], inbound: [], outbound: [] },
+  { key: "2:", label: "Conflicting definition", types: ["Organization"], id: "#duplicate", scriptIndex: 2, path: "", value: DUP2, findings: [CONFLICT("/@id")], inbound: [], outbound: [] },
+];
+
+const RAW_MAIN = JSON.stringify({ "@context": "https://schema.org", "@graph": [ARTICLE, PAGE, SITE, ORG, PERSON, MISSING] }, null, 2);
+const SCRIPTS = [
+  { index: 0, status: "valid", entityCount: 6, findings: [], raw: RAW_MAIN },
+  { index: 1, status: "valid", entityCount: 1, findings: [CONFLICT("/@id")], raw: JSON.stringify(DUP1, null, 2) },
+  { index: 2, status: "valid", entityCount: 1, findings: [CONFLICT("/@id")], raw: JSON.stringify(DUP2, null, 2) },
+  { index: 3, status: "invalid", entityCount: 0, findings: [INVALID_JSON], raw: '{ "this": "script is intentionally malformed",' },
+];
+
+const PAGE_FINDINGS = [INVALID_JSON, CONFLICT("/@id"), CONFLICT("/@id"), UNRESOLVED];
+
+const SEVERITY_COLOR = { error: "#ff918b", warning: "#ffd166", info: "#87d7c4" };
+const TAB_BASE = "border:1px solid transparent;border-radius:7px;background:transparent;color:inherit;cursor:pointer;padding:6px 10px;font:inherit;white-space:nowrap";
+const ENTITY_BASE = "display:grid;gap:3px;width:100%;margin-top:5px;padding:8px;text-align:left;border:1px solid transparent;border-radius:7px;background:transparent;color:inherit;cursor:pointer;font:inherit";
+
+class Component extends DCLogic {
+  state = { view: "summary", selectedKey: ENTITIES[0].key, liveMessage: "", closed: false };
+
+  finding(f) {
+    const color = SEVERITY_COLOR[f.severity];
+    return {
+      severity: f.severity,
+      message: f.message,
+      style: `border-left:3px solid ${color};padding:8px 10px;background:rgb(255 255 255 / 4%)`,
+      severityStyle: `color:${color}`,
+      severityLabel: f.severity.charAt(0).toUpperCase() + f.severity.slice(1),
+      location: `${f.ruleId} · ${f.path || "/"}`,
+    };
+  }
+
+  severityLabel(findings) {
+    if (findings.some((f) => f.severity === "error")) return "Error";
+    if (findings.some((f) => f.severity === "warning")) return "Warning";
+    if (findings.some((f) => f.severity === "info")) return "Info";
+    return "No findings";
+  }
+
+  renderVals() {
+    const { view, selectedKey, liveMessage, closed } = this.state;
+    const selected = ENTITIES.find((e) => e.key === selectedKey) ?? ENTITIES[0];
+
+    const tabs = [
+      ["summary", "Summary"],
+      ["entities", "Entities (8)"],
+      ["scripts", "Scripts (4)"],
+    ].map(([id, label]) => ({
+      label,
+      aria: `Show ${label}`,
+      selected: String(view === id),
+      style: view === id ? `${TAB_BASE};border-color:#83b7ff;background:rgb(131 183 255 / 12%)` : TAB_BASE,
+      onClick: () => this.setState({ view: id }),
+    }));
+
+    const groupMap = new Map();
+    for (const entity of ENTITIES) {
+      for (const type of entity.types.length ? entity.types : ["Untyped"]) {
+        const list = groupMap.get(type) ?? [];
+        list.push(entity);
+        groupMap.set(type, list);
+      }
+    }
+    const groups = [...groupMap.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([name, list], i) => ({
+        heading: `${name} (${list.length})`,
+        style: i === 0 ? "" : "margin-top:14px",
+        items: list.map((entity) => ({
+          label: entity.label,
+          aria: `Inspect ${entity.label}`,
+          meta: `Script ${entity.scriptIndex + 1} · ${this.severityLabel(entity.findings)}`,
+          current: String(entity.key === selectedKey),
+          style: entity.key === selectedKey ? `${ENTITY_BASE};border-color:#83b7ff;background:rgb(131 183 255 / 12%)` : ENTITY_BASE,
+          onClick: () => this.setState({ selectedKey: entity.key }),
+        })),
+      }));
+
+    const refs = (list) => list.map((r) => ({ targetId: r.targetId, meta: `${r.status} · ${r.propertyPath || "/"}` }));
+
+    return {
+      open: !closed,
+      closed,
+      liveMessage,
+      isSummary: view === "summary",
+      isEntities: view === "entities",
+      isScripts: view === "scripts",
+      tabs,
+      groups,
+      counts: [{ text: "8 entities" }, { text: "1 errors" }, { text: "3 warnings" }],
+      summaryCards: [
+        { label: "Scripts", value: "4" },
+        { label: "Entities", value: "8" },
+        { label: "Errors", value: "1" },
+        { label: "Warnings", value: "3" },
+        { label: "Duplicate IDs", value: "1" },
+        { label: "Unresolved references", value: "1" },
+      ],
+      typesText: "Article, BlogPosting, Organization, Person, WebPage, WebSite",
+      pageFindings: PAGE_FINDINGS.map((f) => this.finding(f)),
+      detail: {
+        heading: selected.label,
+        json: JSON.stringify(selected.value, null, 2),
+        defs: [
+          { term: "Types", value: selected.types.join(", ") || "Untyped" },
+          { term: "@id", value: selected.id ?? "None" },
+          { term: "Script", value: String(selected.scriptIndex + 1) },
+          { term: "Path", value: selected.path || "/" },
+        ],
+        findings: selected.findings.map((f) => this.finding(f)),
+        hasFindings: selected.findings.length > 0,
+        noFindings: selected.findings.length === 0,
+        inbound: refs(selected.inbound),
+        hasInbound: selected.inbound.length > 0,
+        noInbound: selected.inbound.length === 0,
+        outbound: refs(selected.outbound),
+        hasOutbound: selected.outbound.length > 0,
+        noOutbound: selected.outbound.length === 0,
+      },
+      scripts: SCRIPTS.map((s) => ({
+        heading: `Script ${s.index + 1}`,
+        meta: `${s.status.charAt(0).toUpperCase() + s.status.slice(1)} · ${s.entityCount} entities · ${s.findings.length} findings`,
+        aria: `Log source for script ${s.index + 1}`,
+        raw: s.raw,
+        findings: s.findings.map((f) => this.finding(f)),
+        hasFindings: s.findings.length > 0,
+        noFindings: s.findings.length === 0,
+        onLog: () => this.setState({ liveMessage: `Script ${s.index + 1} logged to the console.` }),
+      })),
+      onRefresh: () => this.setState({ liveMessage: "" }),
+      onCopy: () => this.setState({ liveMessage: "Inspection copied." }),
+      onCopyEntity: () => this.setState({ liveMessage: "Entity JSON copied." }),
+      onLogSource: () => this.setState({ liveMessage: "Source script logged to the console." }),
+      onClose: () => this.setState({ closed: true }),
+      onOpen: () => this.setState({ closed: false, liveMessage: "" }),
+    };
+  }
+}
+</script>
+</body>
+</html>

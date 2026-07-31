@@ -3,3 +3,5 @@ coverage
 node_modules
 pnpm-lock.yaml
 docs/plans/initial-plan.md
+docs/assets
+docs/index.html
