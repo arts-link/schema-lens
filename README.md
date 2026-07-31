@@ -1,5 +1,12 @@
 # Schema Lens
 
+[![CI](https://github.com/arts-link/schema-lens/actions/workflows/ci.yml/badge.svg)](https://github.com/arts-link/schema-lens/actions/workflows/ci.yml)
+[![Release](https://github.com/arts-link/schema-lens/actions/workflows/release.yml/badge.svg)](https://github.com/arts-link/schema-lens/actions/workflows/release.yml)
+[![npm: core](https://img.shields.io/npm/v/@arts-link/schema-lens-core.svg?label=core&color=cb3837)](https://www.npmjs.com/package/@arts-link/schema-lens-core)
+[![npm: overlay](https://img.shields.io/npm/v/@arts-link/schema-lens-overlay.svg?label=overlay&color=cb3837)](https://www.npmjs.com/package/@arts-link/schema-lens-overlay)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](#contributing)
+
 Schema Lens is an open-source, browser-based inspector for Schema.org JSON-LD. It collects every JSON-LD script in a document, parses scripts independently, normalizes inspectable entities, connects exact `@id` references, reports deterministic diagnostics, and can display the result in an isolated Shadow DOM panel.
 
 The project is framework-independent. The core package can be used by themes, CMS projects, browser extensions, test suites, or other browser applications, while the overlay is optional.
@@ -16,14 +23,7 @@ The project is framework-independent. The core package can be used by themes, CM
 
 ## Installation
 
-The packages are prepared for npm publication but are not published yet. Inside this workspace:
-
-```sh
-pnpm install
-pnpm build
-```
-
-After publication:
+Install the published packages from npm:
 
 ```sh
 pnpm add @arts-link/schema-lens-core
@@ -178,24 +178,7 @@ GitHub Actions validates and builds every pull request and every push to `main`.
 - publishes changed public packages after that release pull request is merged;
 - creates matching GitHub Releases and npm provenance attestations.
 
-The release job remains disabled until the repository variable `NPM_TRUSTED_PUBLISHING` is set to `true`.
-
-Because npm Trusted Publishing is configured per existing package, bootstrap each package once with an interactive, 2FA-protected publish from a clean `main` checkout:
-
-```sh
-pnpm install --frozen-lockfile
-pnpm build
-pnpm --filter @arts-link/schema-lens-core publish --access public
-pnpm --filter @arts-link/schema-lens-overlay publish --access public
-```
-
-Complete npm's 2FA challenge for each publish. After the packages exist:
-
-1. Configure a GitHub Actions trusted publisher for both packages with GitHub owner `arts-link`, repository `schema-lens`, workflow filename `release.yml`, and permission to run `npm publish`.
-2. Set the GitHub Actions repository variable `NPM_TRUSTED_PUBLISHING` to `true`.
-3. Allow GitHub Actions to create release pull requests, or supply an appropriately scoped GitHub App or fine-grained token to Changesets.
-
-Trusted Publishing requires an OIDC-compatible npm CLI. The release workflow uses Node.js 24, installs npm 11.15 or newer, grants only the required job permissions, and performs no dependency-cache restore during publication.
+Trusted Publishing is enabled independently for both public packages. The release workflow uses Node.js 24, installs an OIDC-compatible npm CLI, grants only the required job permissions, and performs no dependency-cache restore during publication.
 
 Add a Changeset to each pull request containing a user-visible package change:
 
@@ -209,8 +192,8 @@ pnpm changeset
 - Unmatched absolute URLs are recorded as external rather than warned as unresolved.
 - Schema Lens includes only a small deterministic advisory set, not the complete Schema.org vocabulary.
 - Version 0.1 inspects browser DOM scripts rather than accepting arbitrary server-side JSON values.
-- The npm package names were unclaimed when release automation was configured; publishing requires membership in the `@arts-link` npm organization with package write access.
-- Browser compatibility is configured and tested in jsdom; the example still requires final manual verification in each supported browser before publication.
+- Publishing requires membership in the `@arts-link` npm organization with package write access.
+- Browser compatibility is configured and tested in jsdom; releases still require manual verification in each supported browser.
 
 ## Contributing
 
