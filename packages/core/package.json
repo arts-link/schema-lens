@@ -5,6 +5,15 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arts-link/schema-lens.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/arts-link/schema-lens/issues"
+  },
+  "homepage": "https://github.com/arts-link/schema-lens/tree/main/packages/core#readme",
   "files": [
     "dist",
     "README.md"
@@ -28,6 +37,7 @@
     "node": ">=22"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   }
 }

@@ -170,13 +170,29 @@ pnpm size
 
 The example includes valid linked entities, duplicate IDs, an unresolved reference, malformed JSON, and controls for adding, changing, and removing JSON-LD after load.
 
+## Automated releases
+
+GitHub Actions validates and builds every pull request and every push to `main`. After a successful `main` build, the Changesets release job:
+
+- creates or updates a `Release packages` pull request when pending Changesets exist;
+- publishes changed public packages after that release pull request is merged;
+- creates matching GitHub Releases and npm provenance attestations.
+
+Automated npm publication requires an Actions secret named `NPM_TOKEN` with permission to publish the `@schema-lens` scope. Without that secret, builds and release pull requests still work, but publication is skipped.
+
+Add a Changeset to each pull request containing a user-visible package change:
+
+```sh
+pnpm changeset
+```
+
 ## Known limitations
 
 - IDs are matched as exact strings; URL expansion, base resolution, remote document loading, and JSON-LD expansion are intentionally out of scope.
 - Unmatched absolute URLs are recorded as external rather than warned as unresolved.
 - Schema Lens includes only a small deterministic advisory set, not the complete Schema.org vocabulary.
 - Version 0.1 inspects browser DOM scripts rather than accepting arbitrary server-side JSON values.
-- Package names have not been checked for npm availability.
+- The npm package names were unclaimed when release automation was configured; publishing still requires control of the `@schema-lens` npm scope.
 - Browser compatibility is configured and tested in jsdom; the example still requires final manual verification in each supported browser before publication.
 
 ## Contributing

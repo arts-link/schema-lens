@@ -5,6 +5,14 @@
   "description": "A browser-based inspector for Schema.org JSON-LD.",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arts-link/schema-lens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arts-link/schema-lens/issues"
+  },
+  "homepage": "https://github.com/arts-link/schema-lens#readme",
   "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": ">=22"
@@ -20,7 +28,8 @@
     "format:check": "prettier --check .",
     "size": "node scripts/report-size.mjs",
     "changeset": "changeset",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
