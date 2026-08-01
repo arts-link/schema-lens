@@ -18,12 +18,13 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "pnpm -r --if-present build",
+    "build": "pnpm -r --if-present build && pnpm build:docs",
+    "build:docs": "vite build --config vite.docs.config.ts",
     "dev": "pnpm --filter @arts-link/schema-lens-example-basic dev",
     "test": "pnpm -r --if-present test",
     "test:watch": "pnpm -r --parallel --if-present test:watch",
     "lint": "pnpm --filter @arts-link/schema-lens-core build && pnpm --filter @arts-link/schema-lens-overlay build && eslint .",
-    "typecheck": "pnpm -r --if-present typecheck",
+    "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r --if-present typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "size": "node scripts/report-size.mjs",

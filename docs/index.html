@@ -7,14 +7,182 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareSourceCode",
-  "name": "Schema Lens",
-  "description": "An open-source browser inspector for Schema.org JSON-LD with deterministic diagnostics and an optional accessible overlay.",
-  "url": "https://arts-link.github.io/schema-lens/",
-  "codeRepository": "https://github.com/arts-link/schema-lens",
-  "license": "https://github.com/arts-link/schema-lens/blob/main/LICENSE",
-  "programmingLanguage": ["TypeScript", "JavaScript"],
-  "runtimePlatform": "Web browser"
+  "@graph": [
+    {
+      "@id": "https://arts-link.com/#organization",
+      "@type": "Organization",
+      "name": "arts-link",
+      "url": "https://arts-link.com/",
+      "sameAs": "https://github.com/arts-link",
+      "member": { "@id": "https://arts-link.com/#benjamin-strawbridge" }
+    },
+    {
+      "@id": "https://arts-link.com/#benjamin-strawbridge",
+      "@type": "Person",
+      "name": "Benjamin Strawbridge",
+      "alternateName": "Ben Strawbridge",
+      "sameAs": "https://github.com/benstraw",
+      "affiliation": { "@id": "https://arts-link.com/#organization" },
+      "knowsAbout": [
+        "Schema.org",
+        "JSON-LD",
+        "TypeScript",
+        "web accessibility",
+        "open-source software"
+      ]
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#website",
+      "@type": "WebSite",
+      "name": "Schema Lens",
+      "url": "https://arts-link.github.io/schema-lens/",
+      "description": "Documentation and live demonstration for the Schema Lens JSON-LD browser inspector.",
+      "inLanguage": "en",
+      "creator": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "publisher": { "@id": "https://arts-link.com/#organization" },
+      "hasPart": { "@id": "https://arts-link.github.io/schema-lens/#webpage" }
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#webpage",
+      "@type": "WebPage",
+      "name": "Schema Lens — JSON-LD browser inspector",
+      "url": "https://arts-link.github.io/schema-lens/",
+      "description": "A landing page, documentation guide, and live demonstration for Schema Lens.",
+      "inLanguage": "en",
+      "datePublished": "2026-07-31",
+      "dateModified": "2026-07-31",
+      "isPartOf": { "@id": "https://arts-link.github.io/schema-lens/#website" },
+      "about": { "@id": "https://arts-link.github.io/schema-lens/#software" },
+      "mainEntity": { "@id": "https://arts-link.github.io/schema-lens/#software" },
+      "author": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "publisher": { "@id": "https://arts-link.com/#organization" },
+      "breadcrumb": { "@id": "https://arts-link.github.io/schema-lens/#breadcrumbs" }
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#article",
+      "@type": ["Article", "TechArticle"],
+      "headline": "A browser-based inspector for Schema.org JSON-LD",
+      "description": "How Schema Lens collects, parses, connects, and diagnoses Schema.org JSON-LD without transmitting page data.",
+      "articleSection": "Developer tools",
+      "keywords": [
+        "Schema.org",
+        "JSON-LD",
+        "structured data",
+        "browser inspector",
+        "developer tools"
+      ],
+      "inLanguage": "en",
+      "datePublished": "2026-07-31",
+      "dateModified": "2026-07-31",
+      "isAccessibleForFree": true,
+      "author": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "publisher": { "@id": "https://arts-link.com/#organization" },
+      "isPartOf": { "@id": "https://arts-link.github.io/schema-lens/#website" },
+      "mainEntityOfPage": { "@id": "https://arts-link.github.io/schema-lens/#webpage" },
+      "about": { "@id": "https://arts-link.github.io/schema-lens/#software" },
+      "mentions": [
+        { "@id": "https://arts-link.github.io/schema-lens/#core-package" },
+        { "@id": "https://arts-link.github.io/schema-lens/#overlay-package" }
+      ]
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#software",
+      "@type": "SoftwareSourceCode",
+      "name": "Schema Lens",
+      "alternateName": "schema-lens",
+      "description": "An open-source browser inspector for Schema.org JSON-LD with deterministic diagnostics and an optional accessible overlay.",
+      "url": "https://arts-link.github.io/schema-lens/",
+      "codeRepository": "https://github.com/arts-link/schema-lens",
+      "license": "https://github.com/arts-link/schema-lens/blob/main/LICENSE",
+      "programmingLanguage": ["TypeScript", "JavaScript"],
+      "runtimePlatform": "Modern web browsers and Node.js 22 or newer",
+      "version": "0.1.0",
+      "dateCreated": "2026-07-31",
+      "dateModified": "2026-07-31",
+      "isAccessibleForFree": true,
+      "keywords": ["Schema.org", "JSON-LD", "structured data", "accessibility"],
+      "author": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "maintainer": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "publisher": { "@id": "https://arts-link.com/#organization" },
+      "mainEntityOfPage": { "@id": "https://arts-link.github.io/schema-lens/#webpage" },
+      "hasPart": [
+        { "@id": "https://arts-link.github.io/schema-lens/#core-package" },
+        { "@id": "https://arts-link.github.io/schema-lens/#overlay-package" }
+      ]
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#core-package",
+      "@type": "SoftwareSourceCode",
+      "name": "@arts-link/schema-lens-core",
+      "description": "Framework-independent JSON-LD parsing, normalization, graph construction, diagnostics, serialization, and DOM observation.",
+      "url": "https://www.npmjs.com/package/@arts-link/schema-lens-core",
+      "codeRepository": "https://github.com/arts-link/schema-lens/tree/main/packages/core",
+      "license": "https://github.com/arts-link/schema-lens/blob/main/LICENSE",
+      "programmingLanguage": "TypeScript",
+      "runtimePlatform": "Modern web browsers and Node.js 22 or newer",
+      "version": "0.1.0",
+      "isAccessibleForFree": true,
+      "author": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "publisher": { "@id": "https://arts-link.com/#organization" },
+      "isPartOf": { "@id": "https://arts-link.github.io/schema-lens/#software" }
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#overlay-package",
+      "@type": "SoftwareSourceCode",
+      "name": "@arts-link/schema-lens-overlay",
+      "description": "A framework-free, accessible browser overlay built on the Schema Lens core package.",
+      "url": "https://www.npmjs.com/package/@arts-link/schema-lens-overlay",
+      "codeRepository": "https://github.com/arts-link/schema-lens/tree/main/packages/overlay",
+      "license": "https://github.com/arts-link/schema-lens/blob/main/LICENSE",
+      "programmingLanguage": "TypeScript",
+      "runtimePlatform": "Modern web browsers",
+      "version": "0.1.0",
+      "isAccessibleForFree": true,
+      "author": { "@id": "https://arts-link.com/#benjamin-strawbridge" },
+      "publisher": { "@id": "https://arts-link.com/#organization" },
+      "isPartOf": { "@id": "https://arts-link.github.io/schema-lens/#software" }
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#packages",
+      "@type": "ItemList",
+      "name": "Schema Lens packages",
+      "numberOfItems": 2,
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Schema Lens core",
+          "item": { "@id": "https://arts-link.github.io/schema-lens/#core-package" }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Schema Lens overlay",
+          "item": { "@id": "https://arts-link.github.io/schema-lens/#overlay-package" }
+        }
+      ]
+    },
+    {
+      "@id": "https://arts-link.github.io/schema-lens/#breadcrumbs",
+      "@type": "BreadcrumbList",
+      "name": "Schema Lens navigation",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "arts-link",
+          "item": "https://arts-link.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Schema Lens",
+          "item": "https://arts-link.github.io/schema-lens/"
+        }
+      ]
+    }
+  ]
 }
 </script>
 <script>
@@ -405,7 +573,7 @@ textarea.input { min-height: 90px; resize: vertical; }
               <span>pnpm add @arts-link/schema-lens-core</span>
               <button type="button" class="btn" data-copy-command="pnpm add @arts-link/schema-lens-core" style="background:var(--color-neutral-800);color:var(--color-neutral-100);font-size:12px;padding:6px 14px" style-hover="background:var(--color-accent-700)">Copy</button>
             </div>
-            <a class="btn btn-secondary" href="https://github.com/arts-link/schema-lens#installation">Add the overlay</a>
+            <button type="button" class="btn btn-secondary" data-add-overlay>Add the overlay</button>
             <a class="btn btn-ghost" href="https://github.com/arts-link/schema-lens#readme">Read the docs →</a>
           </div>
         </div>
@@ -575,6 +743,7 @@ document.addEventListener("click", async (event) => {
   }
 });
 </script>
+<script type="module" src="assets/schema-lens-overlay.js"></script>
 
 
 </body></html>

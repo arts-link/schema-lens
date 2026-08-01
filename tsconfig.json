@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": ["scripts/docs-overlay.ts", "vite.docs.config.ts"]
+}
